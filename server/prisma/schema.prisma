@@ -1,0 +1,137 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  customer
+  organizer
+}
+
+model Users {
+  user_id Int @id @default(autoincrement())
+  role Role
+  username String @db.VarChar(50)
+  password String @db.VarChar(60)
+  email String @unique @db.VarChar(255)
+  img_src String?
+  reference_code String @unique @default(uuid()) 
+  applied_reference_code String 
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  kupon_users KuponUsers[]
+  poin_users PoinUsers[]
+  transaction Transactions[]
+  event_review EventReview[]
+  events Events[]
+  @@map("users")
+}
+
+// poin dan kupon saya bedakan karena memungkinkan memiliki tanggal kadarluarsa yang berbeda dan tidak saya jadikan satu table dengan berbeda tipe karena kesulitan membuat primary key di table yang menampung data spesifik kupon dan poin milik user beserta tanggal kadarluasanya
+
+model KuponUsers{
+  user_id Int
+  user Users @relation(fields:[user_id], references:[user_id])
+  kupon_id Int @id @default(autoincrement())
+  kupon_value Int @default(10000)
+  created_at     DateTime  @default(now())
+  expired_at     DateTime
+  @@map("kupon_users")
+}
+
+model PoinUsers{
+  user_id Int 
+  user Users @relation(fields:[user_id], references:[user_id])
+  poin_id Int @id @default(autoincrement())
+  poin_value Int @default(0)
+  created_at     DateTime  @default(now())
+  expired_at     DateTime
+  @@map("poin_users")
+}
+
+
+model Events {
+  user_id Int
+  user Users @relation(fields:[user_id], references:[user_id])
+  event_id Int @id @default(autoincrement())
+  event_title String 
+  event_img String? 
+  slug String @unique
+  category_id Int
+  category Categories @relation(fields:[category_id], references:[category_id])
+  description String
+  price Int @default(0)
+  start_at DateTime
+  end_at DateTime
+  avaiable_slot Int 
+  filled_slots Int @default(0)
+  transaction Transactions[]
+  event_review EventReview[]
+  @@map("events")
+}
+
+model Categories{
+  category_id Int @id @default(autoincrement())
+  category_by_location String @unique
+  events Events[]
+  @@map("categories")
+}
+
+// bukin pilihan status transaksi
+enum Status {
+ waiting_payment
+ waiting_organizer_confirmation
+ done
+ rejected
+ expired
+ canceled
+}
+
+model Transactions{
+  transaction_id Int @id @default(autoincrement())
+  event_id Int
+  event Events @relation(fields:[event_id], references:[event_id])
+  user_id Int
+  user Users @relation(fields:[user_id], references:[user_id])
+  status Status
+  quantity Int
+  total_price Int
+  point_used Int @default(0)
+  kupon_used Int @default(0)
+  created_at     DateTime  @default(now())
+  expired_at     DateTime
+  event_review EventReview[]
+  @@map("transactions")
+}
+
+//buat pilihan rating dari 1-5, karena nda` boleh angka, jadi aku buat huruf, nanti dilevel aplikasi bisa dirubah jadi angka
+enum Rating {
+  satu
+  dua
+  tiga
+  empat 
+  lima
+}
+
+model EventReview {
+  event_id Int
+  event Events @relation(fields:[event_id], references:[event_id])
+  user_id Int
+  user Users @relation(fields:[user_id], references:[user_id])
+  transaction_id Int
+  transaction Transactions @relation(fields:[transaction_id], references:[transaction_id])
+  review String
+  rating Int
+  @@id([event_id, user_id, transaction_id])
+  @@map("event_review")
+}
