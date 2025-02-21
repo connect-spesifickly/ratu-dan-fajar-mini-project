@@ -54,19 +54,21 @@ export default function Body() {
       </div>
       <div className="py-2">
         <ul>
-          <li className="flex justify-around items-center border-y-2 py-4 bg-gray-100">
-            <div className="w-[33%]  pl-2  text-gray-700 text-[13px] font-semibold">
-              Nama Pembeli
-            </div>
-            <div className="flex justify-around w-[66%] items-center ">
-              <div className=" w-full text-center text-gray-700 text-[13px] font-semibold">
-                Banyak Tiket
+          <div className="pt-2 bg-white sticky top-[56px]">
+            <li className="flex justify-around items-center border-y-2 py-4 bg-gray-100">
+              <div className="w-[33%]  pl-2  text-gray-700 text-[13px] font-semibold">
+                Nama Pembeli
               </div>
-              <div className=" w-full text-center text-gray-700 text-[13px] font-semibold">
-                Total Harga
+              <div className="flex justify-around w-[66%] items-center ">
+                <div className=" w-full text-center text-gray-700 text-[13px] font-semibold">
+                  Banyak Tiket
+                </div>
+                <div className=" w-full text-center text-gray-700 text-[13px] font-semibold">
+                  Total Harga
+                </div>
               </div>
-            </div>
-          </li>
+            </li>
+          </div>
           {event?.data.transaction.map((item) => (
             <li
               key={item.transaction_id}

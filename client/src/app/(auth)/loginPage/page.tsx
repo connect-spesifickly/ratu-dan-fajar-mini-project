@@ -121,6 +121,12 @@ export default function LoginPage() {
                 <p className=" ">Login</p>
               </button>
             </div>
+            <div className="pt-[14px] flex">
+              <a className="text-[14px] pt-[5px] pl-1" href="/registerPage">
+                {" "}
+                <b>Lupa Password</b>
+              </a>
+            </div>
           </div>
         </form>
       </div>

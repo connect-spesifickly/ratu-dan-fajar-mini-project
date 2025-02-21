@@ -89,6 +89,8 @@ export function Body() {
                 <div className="text-[14px] text-[#E76B31] font-semibold mb-[-4px]">
                   {key == "total_event" ? (
                     <a href="../eventsInfo">Detail</a>
+                  ) : key == "total_transaction" ? (
+                    <a href="../transactionChart">Chart</a>
                   ) : null}
                 </div>
               </div>
@@ -119,9 +121,6 @@ export function Body() {
             </div>
           </div>
         ))}
-      </div>
-      <div className="flex justify-center text-[10px] mt-[44px]">
-        © 2025 LOKET. Semua Hak Cipta Dilindungi.
       </div>
     </div>
   );

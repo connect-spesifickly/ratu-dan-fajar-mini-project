@@ -7,6 +7,10 @@ export default function DashInfo() {
     <div>
       <Navbar name="Home" />
       <Body />
+
+      <div className="flex justify-center text-[10px] mt-[44px]">
+        © 2025 LOKET. Semua Hak Cipta Dilindungi.
+      </div>
     </div>
   );
 }

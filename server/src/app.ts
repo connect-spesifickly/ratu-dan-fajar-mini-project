@@ -4,6 +4,7 @@ import { PORT } from "./config";
 import { ErrorHandler } from "./helpers/response.handler";
 import { authRouter } from "./routers/auth.router";
 import { dashRouter } from "./routers/dash.router";
+import { chartRouter } from "./routers/chart.router";
 
 export class App {
   public app: Application;
@@ -17,6 +18,7 @@ export class App {
   private routes() {
     this.app.use("/api/auth", authRouter());
     this.app.use("/api/dash", dashRouter());
+    this.app.use("/api/chart", chartRouter());
   }
 
   private configure() {
