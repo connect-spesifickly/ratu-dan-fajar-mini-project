@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 const authOptions = {
   session: {
     strategy: "jwt" as SessionStrategy,
-    maxAge: 2 * 60, // 2 menit
+    maxAge: 3 * 60, // 2 menit
   },
   providers: [
     CredentialsProvider({

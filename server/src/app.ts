@@ -6,7 +6,7 @@ import { authRouter } from "./routers/auth.router";
 import { dashRouter } from "./routers/dash.router";
 
 export class App {
-  private app: Application;
+  public app: Application;
   constructor() {
     this.app = express();
     this.configure();

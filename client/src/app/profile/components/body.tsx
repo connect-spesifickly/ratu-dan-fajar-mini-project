@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { useFormik } from "formik";
 import { useState, useEffect } from "react";
-import { Navbar } from "./navbar";
+import { Navbar } from "../../../components/navbar";
 // import  {headers}  from "next/headers";
 
 const UpdateSchema = Yup.object().shape({
@@ -44,27 +44,31 @@ export default function ProfileBody() {
   //supaya datanya bisa langsung muncul saat page dibuka
   useEffect(() => {
     async function fetchData() {
-      if (!session) {
-        return;
-      }
-      if (session) {
-        const token = session?.user.access_token;
-        const values = {};
-        if (!token) {
-          throw new Error("Token not found");
+      try {
+        if (!session) {
+          return;
         }
-        const res = await axios.patch<UpdateResponse>(
-          "http://localhost:8002/api/auth/",
-          values,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        if (session) {
+          const token = session?.user.access_token;
+          const values = {};
+          if (!token) {
+            throw new Error("Token not found");
           }
-        );
-        const { username, img_src } = res.data?.data;
-        setUsername(username || session?.user.username || "");
-        setImage(img_src || session?.user.img_src || "");
+          const res = await axios.patch<UpdateResponse>(
+            "http://localhost:8002/api/auth/",
+            values,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const { username, img_src } = res.data?.data;
+          setUsername(username || session?.user.username || "");
+          setImage(img_src || session?.user.img_src || "");
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
     fetchData();
@@ -93,7 +97,7 @@ export default function ProfileBody() {
         }
       );
       console.log("ini responsenya: ", response);
-      alert("Update Success, Please Login Again to see the changes");
+      alert("Update Success");
       const { username, img_src } = response.data?.data;
       console.log("ini username", username);
       console.log("ini img_src", img_src);
@@ -114,7 +118,7 @@ export default function ProfileBody() {
   return (
     <div className="">
       {" "}
-      <Navbar image={image} />
+      <Navbar name="Profil Kamu" />
       <div className="mt-[53px]">
         <form action="" onSubmit={formik.handleSubmit}>
           <div className="bg-white mt-[2px] px-5 pt-4">

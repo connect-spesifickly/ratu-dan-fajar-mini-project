@@ -6,6 +6,7 @@ export const dashInfo = async (event_id: { event_id: number }[]) => {
     const event_transaction = await prisma.transactions.findMany({
       where: {
         event_id: event_id[i].event_id,
+        status: "done",
       },
       select: {
         transaction_id: true,
@@ -20,6 +21,7 @@ export const dashInfo = async (event_id: { event_id: number }[]) => {
       await prisma.transactions.findMany({
         where: {
           event_id: event_id[i].event_id,
+          status: "done",
         },
         select: {
           quantity: true,
@@ -36,6 +38,7 @@ export const dashInfo = async (event_id: { event_id: number }[]) => {
     const event_transaction_ticket_price = await prisma.transactions.findMany({
       where: {
         event_id: event_id[i].event_id,
+        status: "done",
       },
       select: {
         total_price: true,

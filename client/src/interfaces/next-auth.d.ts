@@ -25,3 +25,30 @@ declare module "next-auth/jwt" {
     refresh_token?: string | undefined;
   }
 }
+export interface responseGetEvent {
+  data: {
+    avaiable_slot: number;
+    category: {
+      category_by_location: string;
+    };
+    end_at: string;
+    event_id: number;
+    event_img: string;
+    event_title: string;
+    filled_slot: number;
+    start_at: string;
+    description: string;
+    slug: string;
+    transaction: [
+      {
+        created_at: string;
+        expired_at: string;
+        quantity: number;
+        status: string;
+        transaction_id: number;
+        user_id: number;
+        total_price: number;
+      }
+    ];
+  };
+}

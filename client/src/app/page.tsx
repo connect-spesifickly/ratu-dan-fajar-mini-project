@@ -1,6 +1,7 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
+import { Navbar } from "@/components/navbar";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Dashboard() {
   const { data: session } = useSession();
@@ -9,13 +10,13 @@ export default function Dashboard() {
     return (
       <div>
         <p>Silakan login untuk mengakses dashboard.</p>
-        <button onClick={() => signIn()}>Sign In</button>
+        <a href={"/loginPage"}>Sign In</a>
       </div>
     );
   }
   return (
     <div>
-      \<h1>Dashboard</h1>
+      <Navbar name="Main Page" />\<h1 className="mt-[46px]">Dashboard</h1>
       <p>Welcome, {session.user.username}</p>
       <p>Email: {session.user.email}</p>
       <p>Role: {session.user.role}</p>

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import axios from "axios";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import * as React from "react";
 import { useState, useEffect } from "react";
@@ -10,31 +10,38 @@ interface UpdateResponse {
     img_src?: string;
   };
 }
-export const Navbar = () => {
+interface NavbarName {
+  name: string;
+}
+export const Navbar = (name: NavbarName) => {
   const { data: session } = useSession();
   const [image, setImage] = useState<string>("");
   useEffect(() => {
     async function fetchData() {
-      if (!session) {
-        return;
-      }
-      if (session) {
-        const token = session?.user.access_token;
-        const values = {};
-        if (!token) {
-          throw new Error("Token not found");
+      try {
+        if (!session) {
+          return;
         }
-        const res = await axios.patch<UpdateResponse>(
-          "http://localhost:8002/api/auth/",
-          values,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        if (session) {
+          const token = session?.user.access_token;
+          const values = {};
+          if (!token) {
+            throw new Error("Token not found");
           }
-        );
-        const { img_src } = res.data?.data;
-        setImage(img_src || session?.user.img_src || "");
+          const res = await axios.patch<UpdateResponse>(
+            "http://localhost:8002/api/auth/",
+            values,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          const { img_src } = res.data?.data;
+          setImage(img_src || session?.user.img_src || "");
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
     fetchData();
@@ -44,7 +51,7 @@ export const Navbar = () => {
     <div className="fixed top-0 w-full z-50">
       <div className="flex justify-between items-center px-5 py-1 bg-base-100 text-black shadow-md">
         <div className="text-[22px] font-bold">
-          <Link href="/">Loket</Link>
+          <Link href="/">{name.name}</Link>
         </div>
         <div className="">
           <div className="dropdown dropdown-end">
@@ -68,16 +75,16 @@ export const Navbar = () => {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a className="justify-between">
+                <a className="justify-between" href="/profile">
                   Profile
                   <span className="badge">New</span>
                 </a>
               </li>
               <li>
-                <a>Transaction</a>
+                <a href="/dashInfo">Management</a>
               </li>
               <li>
-                <a>Logout</a>
+                <button onClick={() => signOut()}>Logout</button>
               </li>
             </ul>
           </div>

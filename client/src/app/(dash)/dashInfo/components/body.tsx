@@ -88,7 +88,7 @@ export function Body() {
                 </div>
                 <div className="text-[14px] text-[#E76B31] font-semibold mb-[-4px]">
                   {key == "total_event" ? (
-                    <a href="../eventInfo">Detail</a>
+                    <a href="../eventsInfo">Detail</a>
                   ) : null}
                 </div>
               </div>
